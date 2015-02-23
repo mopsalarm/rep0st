@@ -1,0 +1,11 @@
+clint
+Flask==0.10.1
+Logbook==0.8.1
+Pillow==2.7.0
+first==2.0.1
+futures==2.2.0
+gevent==1.0.1
+numpy==1.9.1
+pathlib==1.0.1
+requests==2.5.1
+scipy==0.13.3
