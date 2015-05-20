@@ -3,6 +3,8 @@ import traceback
 from clint.textui import progress
 import concurrent.futures
 import cv2
+import math
+import itertools
 import numpy
 import numpy.linalg
 
@@ -20,12 +22,13 @@ def build_feature_vector_for_image(image):
     scaled = cv2.cvtColor(scaled, cv2.COLOR_BGR2HSV)
 
     # extract image channels
-    hue = scaled[:, :, 0] / 2
+    hue_sin = (numpy.sin(scaled[:, :, 0] / (255.0 / (2 * math.pi))) * 128 + 128).astype(numpy.uint8)
+    hue_cos = (numpy.cos(scaled[:, :, 0] / (255.0 / (2 * math.pi))) * 128 + 128).astype(numpy.uint8)
     sat = scaled[:, :, 1]
     val = scaled[:, :, 2]
 
     # concat channels for feature vector
-    return numpy.hstack((hue.flat, sat.flat, val.flat))
+    return numpy.hstack((hue_sin.flat, hue_cos.flat, sat.flat, val.flat))
 
 
 def build_feature_vector(post):
@@ -56,7 +59,7 @@ def has_feature_vector(target, post):
 def mmap_feature_file():
     """Maps the features.np in memory. The file must already exist"""
     return numpy.memmap("features.np", mode="r+",
-                        dtype=numpy.uint8, shape=(1000000, 1 + 3 * 36))
+                        dtype=numpy.uint8, shape=(1000000, 1 + 4 * 36))
 
 
 # noinspection PyBroadException
@@ -90,7 +93,7 @@ def update_feature_vectors(posts):
 def main():
     db = rep0st.download.open_dataset()
     posts = (p for p in rep0st.download.db_posts(db["posts"]) if p.static)
-    # posts = itertools.islice(posts, 1000)
+    # posts = itertools.islice(posts, 5)
     update_feature_vectors(tuple(posts))
 
 

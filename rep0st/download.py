@@ -1,20 +1,16 @@
 from __future__ import division
 from __future__ import unicode_literals
 
-import math
+import itertools
+
 import gevent
 import gevent.pool
 import gevent.monkey
-
 import dataset
 import requests
-import itertools
 import logbook
 import pathlib
-import numpy
-
 from clint.textui import progress
-from PIL import Image
 from first import first
 
 

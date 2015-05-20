@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from operator import attrgetter
 import itertools
 
@@ -6,12 +8,12 @@ import flask
 import logbook
 import numpy
 
-import rep0st.analyze
 import rep0st.download
+import rep0st.analyze
 
 
 def shape_feature(feature):
-    return feature.astype(numpy.float32).reshape((1, 3 * 36))
+    return feature.astype(numpy.float32).reshape((1, 4 * 36))
 
 
 class ImageSearch(object):
@@ -95,7 +97,7 @@ def make_webapp():
 
 def main():
     app = make_webapp()
-    app.run(host="0.0.0.0", port=1576, threaded=True)
+    app.run(host="0.0.0.0", port=1576, threaded=True, debug=True, use_reloader=False)
 
 
 if __name__ == '__main__':
